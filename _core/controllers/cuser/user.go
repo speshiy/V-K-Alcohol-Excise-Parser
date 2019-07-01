@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/models/muser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/muser"
 )
 
 //Get return info about user

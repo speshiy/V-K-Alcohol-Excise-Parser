@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/controllers/ccompany"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/controllers/cscript"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/controllers/cuser"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/models/muser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/ccompany"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/cscript"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/cuser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parse/common"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parse/database"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
@@ -49,9 +49,9 @@ func MainMiddleware() gin.HandlerFunc {
 		var DB *gorm.DB
 
 		//Set locale from header
-		DB, err = database.OpenDatabase("script", "script", settings.DBRTUP, "", "UTC")
+		DB, err = database.OpenDatabase("v_k_alcohol_excise_parser", "v_k_alcohol_excise_parser", settings.DBRTUP, "", "UTC")
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_CONNECT_MAIN_DB"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_CONNECT_core_DB"})
 			return
 		}
 		defer DB.Close()

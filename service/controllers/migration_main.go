@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/models/mcompany"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/models/mscript"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_main/models/muser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/mcompany"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/mscript"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parse/database"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
 )
