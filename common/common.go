@@ -16,7 +16,7 @@ import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 	"golang.org/x/crypto/bcrypt"
 	validator "gopkg.in/go-playground/validator.v9"
 )
@@ -37,8 +37,8 @@ type Config struct {
 func (c *Config) SetConfigLocal() {
 	c.Type = "local"
 	c.DBHD = "127.0.0.1"
-	c.Port = "8080"
-	c.PortService = "8081"
+	c.Port = "49001"
+	c.PortService = "49002"
 	c.DBRP = "1"
 	c.DBRTUP = "1"
 	c.CertPath = ""
@@ -49,12 +49,12 @@ func (c *Config) SetConfigLocal() {
 func (c *Config) SetConfigProd() {
 	c.Type = "prod"
 	c.DBHD = "127.0.0.1"
-	c.Port = "8080"
-	c.PortService = "8081"
+	c.Port = "49001"
+	c.PortService = "49002"
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
-	c.CertPath = "/etc/letsencrypt/live/sh.tuvis.world/fullchain.pem"
-	c.KeyCertPath = "/etc/letsencrypt/live/sh.tuvis.world/privkey.pem"
+	c.CertPath = "/etc/letsencrypt/live/vkaep.tuvis.world/fullchain.pem"
+	c.KeyCertPath = "/etc/letsencrypt/live/vkaep.tuvis.world/privkey.pem"
 }
 
 //GetConfigByType return config by type
@@ -119,25 +119,6 @@ func InitGlobalVars() error {
 	initValidator()
 
 	return nil
-}
-
-//SetLocale set locale language to context
-func SetLocale(c *gin.Context) {
-	locale := c.GetHeader("X-Locale")
-	if locale == "" {
-		locale = "RU"
-	}
-
-	c.Set("locale", strings.ToUpper(locale))
-}
-
-//GetLocale return locale language
-func GetLocale(c *gin.Context) string {
-	locale, exists := c.Get("locale")
-	if !exists {
-		locale = "RU"
-	}
-	return locale.(string)
 }
 
 //GetNewUUID returns new UUID

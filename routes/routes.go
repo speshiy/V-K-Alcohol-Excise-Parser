@@ -6,13 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/ccompany"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/cscript"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/controllers/cuser"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/muser"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/common"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/database"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/controllers/cuser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
 
 //InitRoutes инициализирует пути
@@ -21,22 +18,13 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 	g.Use(MainMiddleware())
 	{
 		g.POST("/", func(c *gin.Context) {
-			var config common.Config
-			config.SetConfigLocal()
-			c.JSON(200, config)
+			c.JSON(200, "VKAEP-API-WORKS-OK")
 		})
 
-		g.GET("/companies", ccompany.GetCompanies)
-
-		g.GET("/script-types/:CompanyID", cscript.GetScriptTypes)
-		g.POST("/script-type", cscript.PostScriptType)
-		g.PUT("/script-type", cscript.PutScriptType)
-		g.DELETE("/script-type/:ID", cscript.DeleteScriptType)
-
-		g.GET("/blocks/:TypeID", cscript.GetScriptBlocks)
-		g.POST("/block", cscript.PostScriptBlock)
-		g.PUT("/block", cscript.PutScriptBlock)
-		g.DELETE("/block/:ID", cscript.DeleteScriptBlock)
+		// g.GET("/script-types/:CompanyID", cscript.GetScriptTypes)
+		// g.POST("/script-type", cscript.PostScriptType)
+		// g.PUT("/script-type", cscript.PutScriptType)
+		// g.DELETE("/script-type/:ID", cscript.DeleteScriptType)
 	}
 
 	return router
@@ -48,8 +36,7 @@ func MainMiddleware() gin.HandlerFunc {
 		var err error
 		var DB *gorm.DB
 
-		//Set locale from header
-		DB, err = database.OpenDatabase("v_k_alcohol_excise_parser", "v_k_alcohol_excise_parser", settings.DBRTUP, "", "UTC")
+		DB, err = database.OpenDatabase("vkaep", "vkaep", settings.DBRTUP, "", "UTC")
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_CONNECT_core_DB"})
 			return

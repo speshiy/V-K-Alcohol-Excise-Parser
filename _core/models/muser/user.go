@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/common"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 )
 
 //User structure

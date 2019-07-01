@@ -1,4 +1,4 @@
-speshiy/V-K-Alcohol-Excise-Parse:
+speshiy/V-K-Alcohol-Excise-Parser:
   # This Basic Distelli Manifest assumes the following
   # has been provisioned on the destination deploy server:
   #
@@ -19,9 +19,9 @@ speshiy/V-K-Alcohol-Excise-Parse:
   PostInstall:
     - echo "Begin Post Install"
     - export GOPATH=/home/distelli/go
-    - sudo rm -rf /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parse
-    - sudo mkdir -p /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parse
-    - sudo cp -r * /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parse
+    - sudo rm -rf /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parser
+    - sudo mkdir -p /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parser
+    - sudo cp -r * /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parser
     - sudo rm -rf /home/distelli/go/bin/tuvis_sale_script_server
     - sudo mkdir -p /home/distelli/go/bin
     - sudo chown -R distelli:distelli /home/distelli/go
@@ -29,7 +29,7 @@ speshiy/V-K-Alcohol-Excise-Parse:
     - sudo rm -rf /var/www/tuvis/frontend/*
     - sudo cp -r frontend/* /var/www/tuvis/frontend
     - echo "Building app"
-    - cd /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parse
+    - cd /home/distelli/go/src/github.com/speshiy/V-K-Alcohol-Excise-Parser
     - go build -o $GOPATH/bin/tuvis_sale_script_server main.go
     - echo "Delete sources"
     - sudo rm -rf /home/distelli/go/src

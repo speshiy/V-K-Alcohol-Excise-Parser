@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/service/controllers"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/service/controllers"
 )
 
 //InitRoutes инициализирует пути

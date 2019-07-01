@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
 
 //CreateUserRTU create rtu user

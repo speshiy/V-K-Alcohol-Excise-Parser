@@ -7,8 +7,8 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/_core/models/muser"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/common"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 )
 
 //RegistrationInfo struct

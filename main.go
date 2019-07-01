@@ -10,10 +10,10 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/common"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/routes"
-	serviceRoutes "github.com/speshiy/V-K-Alcohol-Excise-Parse/service/routes"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parse/settings"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/routes"
+	serviceRoutes "github.com/speshiy/V-K-Alcohol-Excise-Parser/service/routes"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 	"github.com/xlab/closer"
 )
 
