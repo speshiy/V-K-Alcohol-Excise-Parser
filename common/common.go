@@ -49,8 +49,8 @@ func (c *Config) SetConfigLocal() {
 func (c *Config) SetConfigProd() {
 	c.Type = "prod"
 	c.DBHD = "127.0.0.1"
-	c.Port = "49001"
-	c.PortService = "49002"
+	c.Port = "49777"
+	c.PortService = "49778"
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
 	c.CertPath = "/etc/letsencrypt/live/vkaep.tuvis.world/fullchain.pem"
