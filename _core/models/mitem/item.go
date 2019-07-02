@@ -18,7 +18,7 @@ type Item struct {
 	ItemExcise           uint      `gorm:"column:item_excise;default:null;unique_index;" json:"ItemExcise"`
 	ItemBonus            float32   `gorm:"column:item_bonus;type:decimal(19,3);default:null" json:"ItemBonus"`
 	IsUsed               bool      `gorm:"column:is_used;default:0" json:"IsUsed"`
-	IsUsedDate           time.Time `gorm:"column:is_used_date;type:datetime;default:null" json:"UsedDate"`
+	IsUsedAt             time.Time `gorm:"column:is_used_at;type:datetime;default:null" json:"IsUsedAt"`
 	RecipientName        string    `gorm:"column:recipient_name;type:varchar(255);default:null" json:"RecipientName"`
 	RecipientDocumentID  string    `gorm:"column:recipient_document_id;type:varchar(255);default:null" json:"RecipientDocumentID"`
 	RecipientPhone       string    `gorm:"column:recipient_phone;type:varchar(255);default:null" json:"RecipientPhone"`
