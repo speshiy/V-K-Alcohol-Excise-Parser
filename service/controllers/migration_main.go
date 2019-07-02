@@ -5,16 +5,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mcompany"
-	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mscript"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
 
-//MigrateScript migrate all user models
-func MigrateScript(c *gin.Context) {
-	db, err := database.OpenDatabase("script", "script", settings.DBRTUP, "", "UTC")
+//MigrateVkaep migrate all user models
+func MigrateVkaep(c *gin.Context) {
+	db, err := database.OpenDatabase("vkaep", "vkaep", settings.DBRTUP, "", "UTC")
 	if err != nil {
 		c.String(http.StatusOK, "Connection to DB in service FAILED. %s", err.Error())
 		return
@@ -24,24 +23,13 @@ func MigrateScript(c *gin.Context) {
 	//CREATING TABLES
 	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8").AutoMigrate(
 		&muser.User{},
-		&mcompany.Company{},
-		&mscript.ScriptType{},
-		&mscript.ScriptBlock{},
+		&mitem.Item{},
 	)
-	log.Println("Models in DB script created")
+	log.Println("Models in DB vkaep created")
 
-	db.Model(&mscript.ScriptBlock{}).AddForeignKey("script_type_id", "s_script_type(id)", "RESTRICT", "RESTRICT")
+	log.Println("Foreign key in DB vkaep created")
 
-	log.Println("Foreign key in DB script created")
+	log.Println("Migration vkaep done")
 
-	var company mcompany.Company
-	err = company.PreFill(db)
-	if err != nil {
-		log.Println(err.Error())
-	}
-	log.Println("Company in DB script filled")
-
-	log.Println("Migration script done")
-
-	c.String(http.StatusOK, "Migration script done")
+	c.String(http.StatusOK, "Migration vkaep done")
 }

@@ -6,5 +6,5 @@ import (
 
 //Migrate all bases
 func Migrate(c *gin.Context) {
-	MigrateScript(c)
+	MigrateVkaep(c)
 }
