@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mclient"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
@@ -23,10 +24,13 @@ func MigrateVkaep(c *gin.Context) {
 	//CREATING TABLES
 	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8").AutoMigrate(
 		&muser.User{},
-		&mitem.Item{},
+		&mclient.Client{},
+		&mitem.ItemScanned{},
 		&mitem.ItemInvoice{},
 	)
 	log.Println("Models in DB vkaep created")
+
+	db.Model(&mitem.ItemScanned{}).AddForeignKey("client_id", "s_clients(id)", "RESTRICT", "RESTRICT")
 
 	log.Println("Foreign key in DB vkaep created")
 

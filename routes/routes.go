@@ -16,11 +16,22 @@ import (
 //InitRoutes инициализирует пути
 func InitRoutes(router *gin.Engine) *gin.Engine {
 	g := router.Group("/api/v1/")
+
+	g.GET("/", func(c *gin.Context) {
+		c.JSON(200, "VKAEP-API-WORKS-OK")
+	})
+
+	//Незащищенные пути
 	g.Use(MainMiddleware())
 	{
-		g.POST("/", func(c *gin.Context) {
-			c.JSON(200, "VKAEP-API-WORKS-OK")
-		})
+		g.POST("/user/login", cuser.Login)
+		g.GET("/user/login", cuser.Login)
+	}
+
+	//Пути защищенные авторизацией
+	g.Use(MainMiddleware())
+	g.Use(AuthMiddleware())
+	{
 
 		g.POST("/items/invoices/upload-xls", citem.UploadXLS)
 		g.GET("/items/invoices", citem.GetItemInvoices)
@@ -38,7 +49,7 @@ func MainMiddleware() gin.HandlerFunc {
 
 		DB, err = database.OpenDatabase("vkaep", "vkaep", settings.DBRTUP, "", "UTC")
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_CONNECT_core_DB"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "Ошибка при подключении к БД"})
 			return
 		}
 		defer DB.Close()
@@ -60,49 +71,19 @@ func AuthMiddleware() gin.HandlerFunc {
 		var err error
 		var user muser.User
 
-		//Getting token from session
+		//Получение токена из Headers
 		user.Token, _ = cuser.GetToken(c)
 		if user.Token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "code": "token_error", "message": "E_USER_NOT_AUTHORIZED"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "code": "token_error", "message": "Пользователь не авторизован"})
 			return
 		}
 
-		//Trying to auth with token
-		user, err = cuser.AuthToken(c, user, "token")
+		//Попытка авторизации по X-Token
+		_, err = cuser.AuthToken(c, user, "token")
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "code": "token_error", "message": err.Error()})
 			return
 		}
-
-		//Set main info about user into context
-		c.Set("User", user)
-
-		c.Next()
-	}
-}
-
-//UserMiddleware set guard on routes wich needs the authorization
-func UserMiddleware(checkIsSuper bool) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var err error
-		var user muser.User
-
-		//Getting token from session
-		user.Token, _ = cuser.GetToken(c)
-		if user.Token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "code": "token_error", "message": "E_USER_NOT_AUTHORIZED"})
-			return
-		}
-
-		//Trying to auth with token
-		user, err = cuser.AuthToken(c, user, "token")
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "false", "code": "token_error", "message": err.Error()})
-			return
-		}
-
-		//Set main info about user into context
-		c.Set("User", user)
 
 		c.Next()
 	}

@@ -42,7 +42,7 @@ func (u *User) LoginByEmailPassword(c *gin.Context, password string) error {
 	r = DB.Where("email = ?", u.Email).First(&u)
 	if r.Error != nil {
 		if r.Error.Error() == "record not found" {
-			return errors.New("E_USER_WRONG_EMAIL")
+			return errors.New("Неверный E-Mail")
 		}
 		return r.Error
 	}
@@ -52,7 +52,7 @@ func (u *User) LoginByEmailPassword(c *gin.Context, password string) error {
 		return err
 	}
 	if !b {
-		return errors.New("E_USER_WRONG_PASSWORD")
+		return errors.New("Неверный пароль")
 	}
 
 	return nil

@@ -37,6 +37,21 @@ func (u *User) GetByID(c *gin.Context, DB *gorm.DB) error {
 	return nil
 }
 
+//GetPublicByID return information about user by id
+func (u *User) GetPublicByID(c *gin.Context, DB *gorm.DB) error {
+	if DB == nil {
+		DB = c.MustGet("DB").(*gorm.DB)
+	}
+	var r *gorm.DB
+
+	r = DB.Select("id, user_type, email").First(&u)
+	if r.Error != nil {
+		return r.Error
+	}
+
+	return nil
+}
+
 //GetByToken return information about user by id
 func (u *User) GetByToken(c *gin.Context) error {
 	var DB = c.MustGet("DB").(*gorm.DB)
@@ -149,6 +164,6 @@ func (u User) PreFill(db *gorm.DB) error {
 //GetRefillSQL sql for clean and fill table with new data
 func (User) GetRefillSQL() []string {
 	return []string{
-		"INSERT INTO s_users (id, user_type, email, password) values (1, 'admin', 'admin@tuvis.world', '$2a$04$eEphOUJANN2cUwVFrQzeA.XN5gOyCC7RhTXfN0Jg6CcKEDTvFBOfq')",
+		"INSERT INTO s_users (id, user_type, email, password) values (1, 'admin', 'admin@vk', '$2a$04$eEphOUJANN2cUwVFrQzeA.XN5gOyCC7RhTXfN0Jg6CcKEDTvFBOfq')",
 	}
 }

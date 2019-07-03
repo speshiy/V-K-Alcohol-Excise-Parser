@@ -22,7 +22,7 @@ type RegistrationInfo struct {
 func GetToken(c *gin.Context) (string, error) {
 	h := c.GetHeader("X-Token")
 	if h == "" {
-		return "", errors.New("E_USER_TOKEN_CONFIRM_NOT_FOUND")
+		return "", errors.New("Токен не найден")
 	}
 	return h, nil
 }
@@ -40,21 +40,21 @@ func SignUp(c *gin.Context) {
 
 	err = common.Validate.Var(registrationInfo.Email, "required,email")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "E_EMAIL_INVALID"})
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Неверный E-Mail"})
 		return
 	}
 	err = common.Validate.Var(registrationInfo.Password, "required,min=6")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "E_PASSWORD_INVALID"})
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Неверный пароль"})
 		return
 	}
 	err = common.Validate.Var(registrationInfo.PasswordConfirm, "required,min=6")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "E_PASSWORD_INVALID"})
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Неверный повторный пароль"})
 		return
 	}
 	if registrationInfo.Password != registrationInfo.PasswordConfirm {
-		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "E_PASSWORDS_DOES_NOT_MATCH"})
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Пароли не совпадают"})
 		return
 	}
 
@@ -87,56 +87,6 @@ func Login(c *gin.Context) {
 	var err error
 	var user muser.User
 	var userResponse muser.User
-
-	//Auth user by token confirm
-	tokenConfirm := c.DefaultQuery("token_confirm", "")
-
-	//Auth user by token restore
-	tokenRestorePassword := c.DefaultQuery("token_restore_password", "")
-
-	//determine which token come. Declare slice which contain income token name in base and token value
-	tokenIncome := make([]string, 2, 2)
-
-	if tokenConfirm != "" {
-		tokenIncome[0] = tokenConfirm
-		tokenIncome[1] = "token_confirm"
-	}
-
-	if tokenRestorePassword != "" {
-		tokenIncome[0] = tokenRestorePassword
-		tokenIncome[1] = "token_reset"
-	}
-
-	//if TokenIncome not empty and method GET than auth by this token
-	if (tokenIncome[0] != "") && (c.Request.Method == "GET") {
-		//set to user model income Token
-		user.Token = tokenIncome[0]
-
-		//Auth user by confirm or restore token which takes from email
-		user, err = AuthToken(c, user, tokenIncome[1])
-
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"showError": "false", "status": "false", "code": "token_error", "message": "E_USER_TOKEN_CONFIRM_NOT_FOUND"})
-			return
-		}
-
-		//Creates user TOKEN and put it in Session
-		err = CreateUserToken(c, &user, "token")
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": err.Error()})
-			return
-		}
-
-		userResponse.ID = user.ID
-		err = userResponse.GetByID(c, nil)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"status": "true", "message": "", "data": userResponse})
-		return
-	}
 
 	user.Token, err = GetToken(c)
 
@@ -171,18 +121,18 @@ func Login(c *gin.Context) {
 
 	//If requset GET, that means it's a try to auth by token on start app. If all empty than return
 	if (c.Request.Method == "GET") && (user.Token == "") && (user.Email == "") {
-		c.JSON(http.StatusUnauthorized, gin.H{"showError": "false", "status": "false", "message": "E_USER_TOKEN_NOT_FOUND"})
+		c.JSON(http.StatusUnauthorized, gin.H{"showError": "false", "status": "false", "message": "Токен не найден"})
 		return
 	}
 
 	err = common.Validate.Var(user.Email, "required,email")
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_EMAIL_INVALID"})
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "Неверный E-Mail"})
 		return
 	}
 	err = common.Validate.Var(user.Password, "required,min=6")
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "E_PASSWORD_INVALID"})
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "Неверный пароль"})
 		return
 	}
 
@@ -206,7 +156,7 @@ func Login(c *gin.Context) {
 	}
 
 	userResponse.ID = user.ID
-	err = userResponse.GetByID(c, nil)
+	err = userResponse.GetPublicByID(c, nil)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": err.Error()})
 		return
@@ -227,7 +177,7 @@ func AuthToken(c *gin.Context, user muser.User, tokenType string) (muser.User, e
 		}
 
 		if time.Now().Unix() >= tokenClaims.ExpiresAt {
-			return user, errors.New("E_TOKEN_EXPIRED")
+			return user, errors.New("Токен истек по времени")
 		}
 
 		// userID, err := strconv.Atoi(tokenClaims.Id)

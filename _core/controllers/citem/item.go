@@ -51,10 +51,10 @@ func UploadXLS(c *gin.Context) {
 		err = newItem.Post(c, nil)
 		if err != nil {
 			if strings.Contains(err.Error(), "1062") {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД: '" + item.ItemName + "', строка: " + strconv.Itoa(index+1) +
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(index+1) +
 					" - попытка вставить существующий диапазон акцизов"})
 			} else {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД: '" + item.ItemName + "', строка: " + strconv.Itoa(index+1)})
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(index+1)})
 			}
 			return
 		}
