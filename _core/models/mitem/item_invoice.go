@@ -30,7 +30,7 @@ func GetItemInvoices(c *gin.Context, DB *gorm.DB, ii *[]ItemInvoice) error {
 	}
 
 	var r *gorm.DB
-	r = DB.Order("created_at DESC").Find(&ii)
+	r = DB.Order("id DESC").Find(&ii)
 	if r.Error != nil {
 		return r.Error
 	}
