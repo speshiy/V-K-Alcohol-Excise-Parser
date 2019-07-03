@@ -11,7 +11,7 @@ import (
 //User structure
 type User struct {
 	gorm.Model
-	UserType string `gorm:"column:user_type;type:enum('manager','staff');" json:"UserType"`
+	UserType string `gorm:"column:user_type;type:enum('admin', 'staff');" json:"UserType"`
 	Email    string `gorm:"column:email;type:varchar(100);unique_index;not null" json:"Email"`
 	Password string `gorm:"column:password;type:varchar(100);not null" json:"Password"`
 	Token    string `gorm:"column:token;type:varchar(1000);DEFAULT:null"`
@@ -132,4 +132,23 @@ func (u *User) PutPassword(c *gin.Context) error {
 	}
 
 	return nil
+}
+
+//PreFill fill table with new data
+func (u User) PreFill(db *gorm.DB) error {
+	for _, sql := range u.GetRefillSQL() {
+		r := db.Exec(sql)
+		if r.Error != nil && !strings.Contains(r.Error.Error(), "Duplicate") {
+			return r.Error
+		}
+	}
+
+	return nil
+}
+
+//GetRefillSQL sql for clean and fill table with new data
+func (User) GetRefillSQL() []string {
+	return []string{
+		"INSERT INTO s_users (id, user_type, email, password) values (1, 'admin', 'admin@tuvis.world', '$2a$04$eEphOUJANN2cUwVFrQzeA.XN5gOyCC7RhTXfN0Jg6CcKEDTvFBOfq')",
+	}
 }

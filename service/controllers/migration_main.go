@@ -24,10 +24,17 @@ func MigrateVkaep(c *gin.Context) {
 	db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8").AutoMigrate(
 		&muser.User{},
 		&mitem.Item{},
+		&mitem.ItemInvoice{},
 	)
 	log.Println("Models in DB vkaep created")
 
 	log.Println("Foreign key in DB vkaep created")
+
+	var user muser.User
+	err = user.PreFill(db)
+	if err != nil {
+		log.Println(err.Error())
+	}
 
 	log.Println("Migration vkaep done")
 

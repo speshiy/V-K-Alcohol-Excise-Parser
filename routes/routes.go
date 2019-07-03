@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/controllers/citem"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/controllers/cuser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
@@ -21,10 +22,9 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 			c.JSON(200, "VKAEP-API-WORKS-OK")
 		})
 
-		// g.GET("/script-types/:CompanyID", cscript.GetScriptTypes)
-		// g.POST("/script-type", cscript.PostScriptType)
-		// g.PUT("/script-type", cscript.PutScriptType)
-		// g.DELETE("/script-type/:ID", cscript.DeleteScriptType)
+		g.POST("/items/invoices/upload-xls", citem.UploadXLS)
+		g.POST("/items/invoices", citem.GetItemInvoices)
+
 	}
 
 	return router

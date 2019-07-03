@@ -1,9 +1,9 @@
 package citem
 
 import (
-	"math"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
@@ -21,11 +21,10 @@ type incomeData struct {
 	ItemBonus             float32 `json:"ItemBonus"`
 }
 
-//Post загружает JSON с алкогольной продукцией и вставляет их в БД
-func Post(c *gin.Context) {
+//UploadXLS загружает JSON с алкогольной продукцией и вставляет их в БД
+func UploadXLS(c *gin.Context) {
 	var err error
 	var items []incomeData
-	var quantity uint
 
 	if err = c.ShouldBindJSON(&items); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
@@ -39,24 +38,27 @@ func Post(c *gin.Context) {
 	}
 
 	for index, item := range items {
-		quantity = uint(math.Abs(float64(item.ItemEndExciseNumber - item.ItemBeginExciseNumber)))
+		newItem := mitem.ItemInvoice{}
+		newItem.ItemName = item.ItemName
+		newItem.ItemType = item.ItemType
+		newItem.ItemVolume = item.ItemVolume
+		newItem.ItemMarkType = item.ItemMarkType
+		newItem.ItemSerial = item.ItemSerial
+		newItem.ItemBeginExciseNumber = item.ItemBeginExciseNumber
+		newItem.ItemEndExciseNumber = item.ItemEndExciseNumber
+		newItem.ItemBonus = item.ItemBonus
 
-		for idx := 0; idx < int(quantity); idx++ {
-			newItem := mitem.Item{}
-			newItem.ItemName = item.ItemName
-			newItem.ItemType = item.ItemType
-			newItem.ItemVolume = item.ItemVolume
-			newItem.ItemMarkType = item.ItemMarkType
-			newItem.ItemSerial = item.ItemSerial
-			//Создаем новый акциз для конркетного товара. Акциз это начало диапазона плюс смещение по текущей позиции в цикле
-			newItem.ItemExcise = item.ItemBeginExciseNumber + uint(idx)
-
-			err = newItem.Post(c, nil)
-			if err != nil {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД: " + item.ItemName + " строка:" + strconv.Itoa(index+1)})
-				return
+		err = newItem.Post(c, nil)
+		if err != nil {
+			if strings.Contains(err.Error(), "1062") {
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД: '" + item.ItemName + "', строка: " + strconv.Itoa(index+1) +
+					" - попытка вставить существующий диапазон акцизов"})
+			} else {
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД: '" + item.ItemName + "', строка: " + strconv.Itoa(index+1)})
 			}
+			return
 		}
+
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "true", "message": "Загрузка данных завершена"})
@@ -105,6 +107,11 @@ func validate(c *gin.Context, items *[]incomeData) error {
 		err = common.Validate.Var(item.ItemEndExciseNumber, "required")
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Конечный номер не заполнен - строка: " + strconv.Itoa(idx+1)})
+			return err
+		}
+
+		if item.ItemBeginExciseNumber > item.ItemEndExciseNumber {
+			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Начальный номер акцизов больше чем конечный - строка: " + strconv.Itoa(idx+1)})
 			return err
 		}
 
