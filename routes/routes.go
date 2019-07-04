@@ -32,10 +32,9 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 	g.Use(MainMiddleware())
 	g.Use(AuthMiddleware())
 	{
-
 		g.POST("/items/invoices/upload-xls", citem.UploadXLS)
 		g.GET("/items/invoices", citem.GetItemInvoices)
-
+		g.POST("/items/scanned/report", citem.GetItemScannedReport)
 	}
 
 	return router
