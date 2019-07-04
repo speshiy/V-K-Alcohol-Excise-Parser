@@ -1,6 +1,8 @@
 package mitem
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -38,16 +40,16 @@ func GetItemInvoices(c *gin.Context, DB *gorm.DB, ii *[]ItemInvoice) error {
 	return nil
 }
 
-//GetByExcise возвращаем накладную по акцизу
-func (i *ItemInvoice) GetByExcise(c *gin.Context, DB *gorm.DB) error {
+//GetByExciseRange возвращаем накладную по акцизу в промежутке между цифрами
+func (i *ItemInvoice) GetByExciseRange(c *gin.Context, DB *gorm.DB, excise uint) error {
 	if DB == nil {
 		DB = c.MustGet("DB").(*gorm.DB)
 	}
 
 	//Create main record
 	var r *gorm.DB
-	r = DB.Where("? BETWEEN item_begin_excise_number AND item_end_excise_number").First(&i)
-	if r.Error != nil {
+	r = DB.Where("? BETWEEN item_begin_excise_number AND item_end_excise_number", excise).First(&i)
+	if r.Error != nil && !strings.Contains(r.Error.Error(), "not found") {
 		return r.Error
 	}
 

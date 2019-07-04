@@ -1,6 +1,8 @@
 package mitem
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -21,6 +23,22 @@ type ItemScanned struct {
 //TableName return new table name for User struct
 func (ItemScanned) TableName() string {
 	return "d_items_scanned"
+}
+
+//GetByExcise возвращаем накладную по акцизу
+func (is *ItemScanned) GetByExcise(c *gin.Context, DB *gorm.DB) error {
+	if DB == nil {
+		DB = c.MustGet("DB").(*gorm.DB)
+	}
+
+	//Create main record
+	var r *gorm.DB
+	r = DB.Where("item_excise = ?", is.ItemExcise).First(&is)
+	if r.Error != nil && !strings.Contains(r.Error.Error(), "not found") {
+		return r.Error
+	}
+
+	return nil
 }
 
 //Post new item into DB

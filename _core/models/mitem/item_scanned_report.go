@@ -2,7 +2,6 @@ package mitem
 
 import (
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -11,25 +10,25 @@ import (
 
 //ItemScannedReport отчет об использованных акцизных кодах
 type ItemScannedReport struct {
-	CreatedAt     uint      `gorm:"column:CreatedAt;" json:"CreatedAt"`
-	UpdatedAt     uint      `gorm:"column:UpdatedAt;" json:"UpdatedAt"`
-	ItemName      string    `gorm:"column:ItemName" json:"ItemName"`
-	ItemType      string    `gorm:"column:ItemType" json:"ItemType"`
-	ItemVolume    float32   `gorm:"column:ItemVolume" json:"ItemVolume"`
-	ItemMarkType  string    `gorm:"column:ItemMarkType" json:"ItemMarkType"`
-	ItemSerial    string    `gorm:"column:ItemSerial" json:"ItemSerial"`
-	ItemExcise    uint      `gorm:"column:ItemExcise" json:"ItemExcise"`
-	ItemBonus     float32   `gorm:"column:ItemBonus" json:"ItemBonus"`
-	FirstName     string    `gorm:"FirstName" json:"FirstName"`
-	LastName      string    `gorm:"LastName" json:"LastName"`
-	Phone         string    `gorm:"Phone" json:"Phone"`
-	Gender        string    `gorm:"Gender" json:"Gender"`
-	DocumentID    string    `gorm:"DocumentID" json:"DocumentID"`
-	DateOfBirth   time.Time `gorm:"DateOfBirth" json:"DateOfBirth"`
-	Comment       string    `gorm:"Comment" json:"Comment"`
-	IsLegalEntity bool      `gorm:"IsLegalEntity" json:"IsLegalEntity"`
-	BusinessID    string    `gorm:"BusinessID" json:"BusinessID"`
-	LegalAddress  string    `gorm:"LegalAddress" json:"LegalAddress"`
+	CreatedAt     string  `gorm:"column:CreatedAt;" json:"CreatedAt"`
+	UpdatedAt     string  `gorm:"column:UpdatedAt;" json:"UpdatedAt"`
+	ItemName      string  `gorm:"column:ItemName" json:"ItemName"`
+	ItemType      string  `gorm:"column:ItemType" json:"ItemType"`
+	ItemVolume    float32 `gorm:"column:ItemVolume" json:"ItemVolume"`
+	ItemMarkType  string  `gorm:"column:ItemMarkType" json:"ItemMarkType"`
+	ItemSerial    string  `gorm:"column:ItemSerial" json:"ItemSerial"`
+	ItemExcise    uint    `gorm:"column:ItemExcise" json:"ItemExcise"`
+	ItemBonus     float32 `gorm:"column:ItemBonus" json:"ItemBonus"`
+	FirstName     string  `gorm:"column:FirstName" json:"FirstName"`
+	LastName      string  `gorm:"column:LastName" json:"LastName"`
+	Phone         string  `gorm:"column:Phone" json:"Phone"`
+	Gender        string  `gorm:"column:Gender" json:"Gender"`
+	DocumentID    string  `gorm:"column:DocumentID" json:"DocumentID"`
+	DateOfBirth   string  `gorm:"column:DateOfBirth" json:"DateOfBirth"`
+	Comment       string  `gorm:"column:Comment" json:"Comment"`
+	IsLegalEntity bool    `gorm:"column:IsLegalEntity" json:"IsLegalEntity"`
+	BusinessID    string  `gorm:"column:BusinessID" json:"BusinessID"`
+	LegalAddress  string  `gorm:"column:LegalAddress" json:"LegalAddress"`
 }
 
 //GetItemScannedReport возращает отчет об отсканированных акцизах
@@ -52,7 +51,7 @@ func GetItemScannedReport(c *gin.Context, filter mshared.Filter, isr *[]ItemScan
 				cl.first_name as FirstName,
 				cl.last_name as LastName,
 				cl.phone as Phone,
-				cl.gender as Gender,
+				IF(cl.gender = 'male', 'Мужской', 'Женский') as Gender,
 				cl.document_id as DocumentID,
 				cl.date_of_birth as DateOfBirth,
 				cl.comment as Comment, 

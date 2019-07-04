@@ -115,6 +115,18 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/ttacon/builder"
+  packages = ["."]
+  revision = "c099f663e1c235176c175644792c5eb282017ad7"
+
+[[projects]]
+  name = "github.com/ttacon/libphonenumber"
+  packages = ["."]
+  revision = "fcb3c7a49f84b72622a655041fc713dafffa80ea"
+  version = "v1.0.1"
+
+[[projects]]
   name = "github.com/ugorji/go"
   packages = ["codec"]
   revision = "2adff0894ba3bc2eeb9f9aea45fefd49802e1a13"
@@ -168,6 +180,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bf4b84653e13055ee775a96de50910b098b8470542861844b43e01177d80cf6e"
+  inputs-digest = "edf6ba40abda8c2f4d52f519d121fc4271fd9ba04d2bb53ef0aa4e258ece8387"
   solver-name = "gps-cdcl"
   solver-version = 1
