@@ -125,7 +125,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	err = common.Validate.Var(user.Email, "required,email")
+	err = common.Validate.Var(user.Email, "required")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "false", "message": "Неверный E-Mail"})
 		return

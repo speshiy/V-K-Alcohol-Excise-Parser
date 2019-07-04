@@ -38,6 +38,22 @@ func GetItemInvoices(c *gin.Context, DB *gorm.DB, ii *[]ItemInvoice) error {
 	return nil
 }
 
+//GetByExcise возвращаем накладную по акцизу
+func (i *ItemInvoice) GetByExcise(c *gin.Context, DB *gorm.DB) error {
+	if DB == nil {
+		DB = c.MustGet("DB").(*gorm.DB)
+	}
+
+	//Create main record
+	var r *gorm.DB
+	r = DB.Where("? BETWEEN item_begin_excise_number AND item_end_excise_number").First(&i)
+	if r.Error != nil {
+		return r.Error
+	}
+
+	return nil
+}
+
 //Post new item into DB
 func (i *ItemInvoice) Post(c *gin.Context, DB *gorm.DB) error {
 	if DB == nil {
