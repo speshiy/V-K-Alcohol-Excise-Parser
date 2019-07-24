@@ -30,13 +30,13 @@ ENV TZ=Europe/London
 
 RUN apk add --no-cache tzdata
 
-WORKDIR /home/tuvis-server
+WORKDIR /home/vkaep_server
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /go/bin/vkaep_server .
 
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /go/src/github.com/speshiy/Tuvis-Server/frontend/ ./frontend
+COPY --from=builder /go/src/github.com/speshiy/V-K-Alcohol-Excise-Parser/frontend/ ./frontend
 # Import the root ca-certificates (required for Let's Encrypt)
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 

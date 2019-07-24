@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/speshiy/Tuvis-Server/database"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
 

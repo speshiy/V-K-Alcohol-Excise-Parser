@@ -29,7 +29,7 @@ func main() {
 
 	numcpu := runtime.NumCPU()
 	fmt.Println("CPU count:", numcpu)
-	fmt.Println("Tuvis Server use GOMAXPROCS(1)")
+	fmt.Println("VKAEP Server use GOMAXPROCS(1)")
 	runtime.GOMAXPROCS(1)
 
 	//Initialize global variables
