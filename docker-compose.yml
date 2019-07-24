@@ -19,6 +19,4 @@ services:
       RELEASE: 'true'
       # SSL режим сервера
       SSL: 'true'
-      SCT: prod    
-      # Задаем IP БД только для WINDOWS, чтобы подключиться из контейнера
-      WINDBHOST: host.docker.internal 
+      SCT: prod

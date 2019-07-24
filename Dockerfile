@@ -25,7 +25,6 @@ FROM alpine:3.10 as final
 ENV RELEASE=$RELEASE
 ENV SSL=$SSL
 ENV SCT=$SCT
-ENV WINDBHOST=$WINDBHOST
 ENV TZ=Europe/London
 
 RUN apk add --no-cache tzdata
@@ -48,4 +47,4 @@ EXPOSE 8081
 # we deploy a new version
 VOLUME ["cert-cache"]
 
-ENTRYPOINT ./vkaep_server -release=$RELEASE -ssl=$SSL -sct=$SCT -windbhost=$WINDBHOST
+ENTRYPOINT ./vkaep_server -release=$RELEASE -ssl=$SSL -sct=$SCT

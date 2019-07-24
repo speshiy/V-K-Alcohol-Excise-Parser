@@ -37,7 +37,7 @@ func (c *Config) SetConfigLocal() {
 	c.Type = "local"
 	c.DBHD = "127.0.0.1"
 	c.PortHTTP = "8080"
-	c.PortHTTPS = "443"
+	c.PortHTTPS = "8443"
 	c.PortService = "8081"
 	c.DBRP = "1"
 	c.DBRTUP = "1"
