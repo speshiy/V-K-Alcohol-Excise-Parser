@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,9 +16,11 @@ import (
 	serviceRoutes "github.com/speshiy/V-K-Alcohol-Excise-Parser/service/routes"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 	"github.com/xlab/closer"
+	"golang.org/x/crypto/acme/autocert"
 )
 
-var srv *http.Server
+var srvHTTP *http.Server
+var srvHTTPS *http.Server
 var srvService *http.Server
 
 func main() {
@@ -68,43 +71,75 @@ func main() {
 
 //StartServers just start
 func StartServers(router *gin.Engine, routerService *gin.Engine) {
-	srv = &http.Server{
-		Addr:    ":" + settings.Port,
-		Handler: router,
+	var hostPolicy autocert.HostPolicy
+
+	hostPolicy = autocert.HostWhitelist("vkaep.tuvis.world")
+
+	certManager := &autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: hostPolicy,
+		Cache:      autocert.DirCache("cert-cache"),
+	}
+
+	srvHTTP = &http.Server{
+		Addr:         ":" + settings.PortHTTP,
+		Handler:      router,
+		ReadTimeout:  60 * time.Second,
+		WriteTimeout: 60 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+
+	srvHTTPS = &http.Server{
+		Addr:         ":" + settings.PortHTTPS,
+		Handler:      router,
+		TLSConfig:    &tls.Config{GetCertificate: certManager.GetCertificate},
+		ReadTimeout:  60 * time.Second,
+		WriteTimeout: 60 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	srvService = &http.Server{
-		Addr:    ":" + settings.PortService,
-		Handler: routerService,
+		Addr:         ":" + settings.PortService,
+		Handler:      routerService,
+		ReadTimeout:  120 * time.Second,
+		WriteTimeout: 120 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
+	//Запускаем HTTP порт
 	go func() {
 		var err error
-
+		//Если IsSSL объявлен то, связываем его с http сервером, чтобы получить сертификаты
 		if settings.IsSSL {
-			err = srv.ListenAndServeTLS(settings.CertPath, settings.KeyPath)
-		} else {
-			err = srv.ListenAndServe()
+			srvHTTP.Handler = certManager.HTTPHandler(srvHTTP.Handler)
 		}
-
+		err = srvHTTP.ListenAndServe()
 		if err != http.ErrServerClosed {
 			// Error starting or closing listener:
-			log.Printf("HTTP/S server ListenAndServe: %v", err)
+			log.Printf("HTTP server ListenAndServe: %v", err)
 		}
 	}()
 
+	//Запускаем HTTPS порт если есть флаг
+	if settings.IsSSL {
+		go func() {
+			var err error
+			//Запускаем сервер вместе с TLS шифрованием
+			err = srvHTTPS.ListenAndServeTLS("", "")
+			if err != http.ErrServerClosed {
+				// Error starting or closing listener:
+				log.Printf("HTTPS server ListenAndServe: %v", err)
+			}
+		}()
+	}
+
+	//Запускаем Service порт
 	go func() {
 		var err error
-
-		if settings.IsSSL {
-			err = srvService.ListenAndServeTLS(settings.CertPath, settings.KeyPath)
-		} else {
-			err = srvService.ListenAndServe()
-		}
-
+		err = srvService.ListenAndServe()
 		if err != http.ErrServerClosed {
 			// Error starting or closing listener:
-			log.Printf("HTTP/S Service server ListenAndServe: %v", err)
+			log.Printf("HTTPService server ListenAndServe: %v", err)
 		}
 	}()
 
@@ -114,14 +149,18 @@ func gracefullStop() {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	if err := srv.Shutdown(ctx); err != nil {
+	if err := srvHTTP.Shutdown(ctx); err != nil {
 		log.Printf("HTTP server Shutdown: %v", err)
 	}
-	log.Println("HTTP server Shutdown ", srv.Addr, "successfull")
+	log.Println("HTTP server Shutdown ", srvHTTP.Addr, "successfull")
+
+	if err := srvHTTPS.Shutdown(ctx); err != nil {
+		log.Printf("HTTPS server Shutdown: %v", err)
+	}
+	log.Println("HTTPS server Shutdown ", srvHTTPS.Addr, "successfull")
 
 	if err := srvService.Shutdown(ctx); err != nil {
-		log.Printf("HTTP server Shutdown: %v", err)
+		log.Printf("HTTPService server Shutdown: %v", err)
 	}
-	log.Println("Service server Shutdown ", srvService.Addr, "successfull")
-
+	log.Println("HTTPService server Shutdown ", srvService.Addr, "successfull")
 }

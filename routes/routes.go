@@ -15,10 +15,13 @@ import (
 
 //InitRoutes инициализирует пути
 func InitRoutes(router *gin.Engine) *gin.Engine {
+	//THIS IS HTTP SERVER IMPLEMENTATION FOR FRONTEND
+	router.NoRoute(HTTPStaticServer)
+
 	g := router.Group("/api/v1/")
 
 	g.GET("/", func(c *gin.Context) {
-		c.JSON(200, "VKAEP-API-WORKS-OK")
+		c.JSON(200, "VKAEP API works in normal mode")
 	})
 
 	//Незащищенные пути
