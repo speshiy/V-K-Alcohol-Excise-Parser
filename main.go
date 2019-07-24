@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/routes"
@@ -62,6 +63,8 @@ func main() {
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 	}))
 
+	router.Use(gzip.Gzip(gzip.BestSpeed))
+
 	//Initializing app routes
 	router = routes.InitRoutes(router)
 	routerService = serviceRoutes.InitRoutes(routerService)
@@ -90,7 +93,6 @@ func StartServers(router *gin.Engine, routerService *gin.Engine) {
 		Handler:      router,
 		ReadTimeout:  60 * time.Second,
 		WriteTimeout: 60 * time.Second,
-		IdleTimeout:  120 * time.Second,
 	}
 
 	srvHTTPS = &http.Server{
@@ -99,7 +101,6 @@ func StartServers(router *gin.Engine, routerService *gin.Engine) {
 		TLSConfig:    &tls.Config{GetCertificate: certManager.GetCertificate},
 		ReadTimeout:  60 * time.Second,
 		WriteTimeout: 60 * time.Second,
-		IdleTimeout:  120 * time.Second,
 	}
 
 	srvService = &http.Server{
@@ -107,7 +108,6 @@ func StartServers(router *gin.Engine, routerService *gin.Engine) {
 		Handler:      routerService,
 		ReadTimeout:  120 * time.Second,
 		WriteTimeout: 120 * time.Second,
-		IdleTimeout:  120 * time.Second,
 	}
 
 	//Запускаем HTTP порт
