@@ -29,7 +29,7 @@ ENV TZ=Europe/London
 
 RUN apk add --no-cache tzdata
 
-WORKDIR /home/vkaep_server
+WORKDIR /home/vkaep-server
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /go/bin/vkaep_server .
