@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/routes"
+	migrateControllers "github.com/speshiy/V-K-Alcohol-Excise-Parser/service/controllers"
 	serviceRoutes "github.com/speshiy/V-K-Alcohol-Excise-Parser/service/routes"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 	"github.com/xlab/closer"
@@ -36,6 +37,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
+	//Запуск автомиграции
+	migrateControllers.AutoMigrate()
 
 	//Stop program if flag noRun
 	if settings.IsRelease {
