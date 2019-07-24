@@ -33,7 +33,7 @@ RUN apk add --no-cache tzdata
 WORKDIR /home/tuvis-server
 
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /go/bin/tuvis_server .
+COPY --from=builder /go/bin/vkaep_server .
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /go/src/github.com/speshiy/Tuvis-Server/frontend/ ./frontend
