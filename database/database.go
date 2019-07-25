@@ -130,7 +130,8 @@ func DropDatabase(host string, databaseName string, username string) error {
 	return nil
 }
 
-func tryOpenDatabase(host string, databaseName string, username string, password string, location string) (*gorm.DB, error) {
+//TryOpenDatabase попытка открыть БД
+func TryOpenDatabase(host string, databaseName string, username string, password string, location string) (*gorm.DB, error) {
 	if location == "" {
 		location = "UTC"
 	} else {
@@ -150,7 +151,7 @@ func OpenDatabase(databaseName string, username string, password string, host st
 		return nil, errors.New("Host not set for DB while OpenDatabase " + databaseName)
 	}
 
-	db, err = tryOpenDatabase(host, databaseName, username, password, location)
+	db, err = TryOpenDatabase(host, databaseName, username, password, location)
 	if err != nil {
 		//if user not found then create user and try to open
 		if strings.Contains(err.Error(), "1045") {
@@ -164,7 +165,7 @@ func OpenDatabase(databaseName string, username string, password string, host st
 				return nil, err
 			}
 
-			db, err = tryOpenDatabase(host, databaseName, username, password, location)
+			db, err = TryOpenDatabase(host, databaseName, username, password, location)
 			if err != nil {
 				return nil, err
 			}
@@ -179,7 +180,7 @@ func OpenDatabase(databaseName string, username string, password string, host st
 				return nil, err
 			}
 
-			db, err = tryOpenDatabase(host, databaseName, username, password, location)
+			db, err = TryOpenDatabase(host, databaseName, username, password, location)
 			if err != nil {
 				return nil, err
 			}

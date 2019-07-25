@@ -1,0 +1,22 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.7'
+services:
+  vkaep_server:
+    image: speshiy/vkaep-server
+    # Устанавливаем общую сеть с хостовой машиной
+    network_mode: host
+    #Mount'им папку для хранения сертификатов
+    volumes: 
+      - "/root/cert-cache:/home/vkaep-server/cert-cache"
+    build:
+      # Используем текущий каталог образа
+      context: .
+      # Нзвание dockerfile
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      # Флаг режима запуска vkaep-server, на dev и prod всегда RELEASE = true
+      RELEASE: 'true'
+      # SSL режим сервера
+      SSL: 'true'
+      SCT: prod

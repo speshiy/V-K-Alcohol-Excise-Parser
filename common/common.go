@@ -25,36 +25,33 @@ import (
 type Config struct {
 	Type        string `json:"Type"`
 	DBHD        string `json:"DBHD"`
-	Port        string `json:"Port"`
+	PortHTTP    string `json:"PortHTTP"`
+	PortHTTPS   string `json:"PortHTTPS"`
 	PortService string `json:"PortService"`
 	DBRP        string `json:"DBRP"`
 	DBRTUP      string `json:"DBRTUP"`
-	CertPath    string `json:"CertPath"`
-	KeyCertPath string `json:"KeyCertPath"`
 }
 
 //SetConfigLocal set config for local development
 func (c *Config) SetConfigLocal() {
 	c.Type = "local"
 	c.DBHD = "127.0.0.1"
-	c.Port = "49777"
-	c.PortService = "49778"
+	c.PortHTTP = "8080"
+	c.PortHTTPS = "8443"
+	c.PortService = "8081"
 	c.DBRP = "1"
 	c.DBRTUP = "1"
-	c.CertPath = ""
-	c.KeyCertPath = ""
 }
 
 //SetConfigProd set config for prod development
 func (c *Config) SetConfigProd() {
 	c.Type = "prod"
 	c.DBHD = "127.0.0.1"
-	c.Port = "49777"
+	c.PortHTTP = "80"
+	c.PortHTTPS = "443"
 	c.PortService = "49778"
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
-	c.CertPath = "/etc/letsencrypt/live/vkaep.tuvis.world/fullchain.pem"
-	c.KeyCertPath = "/etc/letsencrypt/live/vkaep.tuvis.world/privkey.pem"
 }
 
 //GetConfigByType return config by type
@@ -98,20 +95,18 @@ func InitGlobalVars() error {
 		config.SetConfigProd()
 	}
 
-	//this command MUST be
-
+	settings.ServerConfigType = *serverConfigType
 	settings.IsRelease = *releaseFlag
-
 	settings.DBHostDefault = config.DBHD
-	settings.Port = config.Port
+	settings.PortHTTP = config.PortHTTP
+	settings.PortHTTPS = config.PortHTTPS
 	settings.PortService = config.PortService
 	settings.DBRP = config.DBRP
 	settings.DBRTUP = config.DBRTUP
 	settings.IsSSL = *sslFlag
-	settings.CertPath = config.CertPath
-	settings.KeyPath = config.KeyCertPath
 
-	log.Println("Port = ", settings.Port)
+	log.Println("PortHTTP = ", settings.PortHTTP)
+	log.Println("PortHTTPS = ", settings.PortHTTPS)
 	log.Println("PortService = ", settings.PortService)
 
 	PrintBinPath()
