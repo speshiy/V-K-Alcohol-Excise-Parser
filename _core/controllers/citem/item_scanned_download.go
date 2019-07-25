@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/speshiy/Tuvis-Sale-Script-Server/common"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
