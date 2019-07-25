@@ -32,15 +32,33 @@ func HTTPStaticServer(c *gin.Context) {
 	}
 
 	appPath := path.Join(dir, file)
-	app = "manage"
+	app = "vkaep"
 
 	//Путь к файлам
-	filePath := "./frontend/" + path.Join(app, appPath)
+	var fileNotFound bool
+	var fileForResponse string
 
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+	filePath := []string{"./frontend/" + path.Join(app, appPath), "/var/www/tuvis.world/frontend/" + path.Join(app, appPath)}
+
+	//Перебираем пути где может лежать frontend
+	for _, f := range filePath {
+		//Обнуляем флаг fileNotFound для текущего пути
+		fileNotFound = false
+		//Если файл не найден то переходим к следующему пути, если это последний путь то флаг будет в TRUE и пользователь увидит ошибку
+		if _, err := os.Stat(f); os.IsNotExist(err) {
+			fileNotFound = true
+			continue
+		} else {
+			//Если файл найден то возвращаем первый попавшийся
+			fileForResponse = f
+			break
+		}
+	}
+
+	if fileNotFound {
 		c.String(http.StatusNotFound, "File "+appPath+" not found.")
 		return
 	}
 
-	c.File(filePath)
+	c.File(fileForResponse)
 }

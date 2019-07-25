@@ -49,7 +49,7 @@ func (c *Config) SetConfigProd() {
 	c.DBHD = "127.0.0.1"
 	c.PortHTTP = "80"
 	c.PortHTTPS = "443"
-	c.PortService = "49778"
+	c.PortService = "8081"
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
 }
