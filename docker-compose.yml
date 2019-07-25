@@ -7,7 +7,7 @@ services:
     network_mode: host
     #Mount'им папку для хранения сертификатов
     volumes: 
-      - "/root/cert-cache:/home/vkaep-server/cert-cache"
+      - "/root/cert-cache:/root/cert-cache"
     build:
       # Используем текущий каталог образа
       context: .

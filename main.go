@@ -85,7 +85,7 @@ func StartServers(router *gin.Engine, routerService *gin.Engine) {
 	certManager := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: hostPolicy,
-		Cache:      autocert.DirCache("cert-cache"),
+		Cache:      autocert.DirCache("/root/cert-cache"),
 	}
 
 	srvHTTP = &http.Server{

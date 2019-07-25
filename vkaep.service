@@ -1,0 +1,11 @@
+[Unit]
+Description=vkaep-server
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/root/vkaep/vkaep-server -release=true -ssl=true -sct=prod
+
+[Install]
+WantedBy=multi-user.target

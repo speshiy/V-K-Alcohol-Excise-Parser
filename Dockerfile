@@ -45,6 +45,6 @@ EXPOSE 8081
 
 # Mount the certificate cache directory as a volume, so it remains even after
 # we deploy a new version
-VOLUME ["cert-cache"]
+VOLUME ["/root/cert-cache"]
 
 ENTRYPOINT ./vkaep_server -release=$RELEASE -ssl=$SSL -sct=$SCT
