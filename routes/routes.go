@@ -18,6 +18,8 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 	//THIS IS HTTP SERVER IMPLEMENTATION FOR FRONTEND
 	router.NoRoute(HTTPStaticServer)
 
+	router.StaticFS("/resources", http.Dir("resources"))
+
 	g := router.Group("/api/v1/")
 
 	g.GET("/", func(c *gin.Context) {
@@ -38,6 +40,7 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 		g.POST("/items/invoices/upload-xls", citem.UploadXLS)
 		g.GET("/items/invoices", citem.GetItemInvoices)
 		g.POST("/items/scanned/report", citem.GetItemScannedReport)
+		g.POST("/items/scanned/download-xls", citem.DownloadXLS)
 		g.POST("/item/bonus", citem.GetItemBonus)
 	}
 

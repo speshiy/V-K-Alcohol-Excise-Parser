@@ -121,6 +121,12 @@
   version = "v1.2.0"
 
 [[projects]]
+  name = "github.com/tealeg/xlsx"
+  packages = ["."]
+  revision = "8be35264fa75a1bbe954ce51eba04f273e2c59e5"
+  version = "v1.0.3"
+
+[[projects]]
   branch = "master"
   name = "github.com/ttacon/builder"
   packages = ["."]
@@ -217,6 +223,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5d01c5f78573b24fdf65c394d6ae706beaa0939b91d880bdb44761033b169d74"
+  inputs-digest = "2db8647c2d618ac9b645b5b220e1e3de329f07d09ee21503256046dee6aaab25"
   solver-name = "gps-cdcl"
   solver-version = 1

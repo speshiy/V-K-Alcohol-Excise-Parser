@@ -10,11 +10,17 @@ import (
 
 //GetItemScannedReport возращает отчет об отсканированных акцизах
 func GetItemScannedReport(c *gin.Context) {
-	var itemScannedReport []mitem.ItemScannedReport
 	var err error
 	var reportFilter mshared.Filter
+	var itemScannedReport []mitem.ItemScannedReport
 
 	if err := c.ShouldBindJSON(&reportFilter); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
+		return
+	}
+
+	err = mshared.ValidateFilterDates(c, &reportFilter)
+	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
 		return
 	}

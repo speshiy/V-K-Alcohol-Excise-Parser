@@ -2,6 +2,7 @@ package mitem
 
 import (
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -10,25 +11,25 @@ import (
 
 //ItemScannedReport отчет об использованных акцизных кодах
 type ItemScannedReport struct {
-	CreatedAt     string  `gorm:"column:CreatedAt;" json:"CreatedAt"`
-	UpdatedAt     string  `gorm:"column:UpdatedAt;" json:"UpdatedAt"`
-	ItemName      string  `gorm:"column:ItemName" json:"ItemName"`
-	ItemType      string  `gorm:"column:ItemType" json:"ItemType"`
-	ItemVolume    float32 `gorm:"column:ItemVolume" json:"ItemVolume"`
-	ItemMarkType  string  `gorm:"column:ItemMarkType" json:"ItemMarkType"`
-	ItemSerial    string  `gorm:"column:ItemSerial" json:"ItemSerial"`
-	ItemExcise    uint    `gorm:"column:ItemExcise" json:"ItemExcise"`
-	ItemBonus     float32 `gorm:"column:ItemBonus" json:"ItemBonus"`
-	FirstName     string  `gorm:"column:FirstName" json:"FirstName"`
-	LastName      string  `gorm:"column:LastName" json:"LastName"`
-	Phone         string  `gorm:"column:Phone" json:"Phone"`
-	Gender        string  `gorm:"column:Gender" json:"Gender"`
-	DocumentID    string  `gorm:"column:DocumentID" json:"DocumentID"`
-	DateOfBirth   string  `gorm:"column:DateOfBirth" json:"DateOfBirth"`
-	Comment       string  `gorm:"column:Comment" json:"Comment"`
-	IsLegalEntity bool    `gorm:"column:IsLegalEntity" json:"IsLegalEntity"`
-	BusinessID    string  `gorm:"column:BusinessID" json:"BusinessID"`
-	LegalAddress  string  `gorm:"column:LegalAddress" json:"LegalAddress"`
+	CreatedAt     time.Time `gorm:"column:CreatedAt;" json:"CreatedAt"`
+	UpdatedAt     string    `gorm:"column:UpdatedAt;" json:"UpdatedAt"`
+	ItemName      string    `gorm:"column:ItemName" json:"ItemName"`
+	ItemType      string    `gorm:"column:ItemType" json:"ItemType"`
+	ItemVolume    float32   `gorm:"column:ItemVolume" json:"ItemVolume"`
+	ItemMarkType  string    `gorm:"column:ItemMarkType" json:"ItemMarkType"`
+	ItemSerial    string    `gorm:"column:ItemSerial" json:"ItemSerial"`
+	ItemExcise    uint      `gorm:"column:ItemExcise" json:"ItemExcise"`
+	ItemBonus     float32   `gorm:"column:ItemBonus" json:"ItemBonus"`
+	FirstName     string    `gorm:"column:FirstName" json:"FirstName"`
+	LastName      string    `gorm:"column:LastName" json:"LastName"`
+	Phone         string    `gorm:"column:Phone" json:"Phone"`
+	Gender        string    `gorm:"column:Gender" json:"Gender"`
+	DocumentID    string    `gorm:"column:DocumentID" json:"DocumentID"`
+	DateOfBirth   time.Time `gorm:"column:DateOfBirth" json:"DateOfBirth"`
+	Comment       string    `gorm:"column:Comment" json:"Comment"`
+	IsLegalEntity bool      `gorm:"column:IsLegalEntity" json:"IsLegalEntity"`
+	BusinessID    string    `gorm:"column:BusinessID" json:"BusinessID"`
+	LegalAddress  string    `gorm:"column:LegalAddress" json:"LegalAddress"`
 }
 
 //GetItemScannedReport возращает отчет об отсканированных акцизах
