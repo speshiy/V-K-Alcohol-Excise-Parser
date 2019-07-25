@@ -1,10 +1,12 @@
 [Unit]
 Description=vkaep-server
+After=network.target
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=5s
+WorkingDirectory=/root/vkaep/
 ExecStart=/root/vkaep/vkaep-server -release=true -ssl=true -sct=prod
 
 [Install]
