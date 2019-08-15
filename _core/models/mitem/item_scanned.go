@@ -25,7 +25,7 @@ func (ItemScanned) TableName() string {
 	return "d_items_scanned"
 }
 
-//GetByExcise возвращаем накладную по акцизу
+//GetByExcise возвращаем отсканированный акциз по номеру
 func (is *ItemScanned) GetByExcise(c *gin.Context, DB *gorm.DB) error {
 	if DB == nil {
 		DB = c.MustGet("DB").(*gorm.DB)

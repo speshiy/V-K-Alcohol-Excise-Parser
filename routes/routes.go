@@ -39,7 +39,7 @@ func InitRoutes(router *gin.Engine) *gin.Engine {
 	{
 		g.POST("/items/invoices/upload-xls", citem.UploadExciseXLS)
 		g.GET("/items/invoices", citem.GetItemInvoices)
-		g.POST("/items/scanned/upload-xls", citem.GetItemInvoices)
+		g.POST("/items/scanned/upload-xls", citem.UploadItemXLS)
 		g.POST("/items/scanned/report", citem.GetItemScannedReport)
 		g.POST("/items/scanned/download-xls", citem.DownloadXLS)
 		g.POST("/item/bonus", citem.GetItemBonus)

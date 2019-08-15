@@ -1,13 +1,125 @@
 package citem
 
 import (
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-resty/resty"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mclient"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
+
+//IncomeScannedData структура
+type IncomeScannedData struct {
+	ExciseNumber uint   `json:"ExciseNumber"`
+	ClientCode   string `json:"ClientCode"`
+}
+
+//SetBonus начисляет бонус
+func SetBonus(c *gin.Context, item *IncomeScannedData, idx int) error {
+	var err error
+	var client mclient.Client
+	var itemInvoice mitem.ItemInvoice
+	var itemScanned mitem.ItemScanned
+
+	//Ищем такой же акциз в отсканированных акцизах для проверки
+	itemScanned.ItemExcise = item.ExciseNumber
+	err = itemScanned.GetByExcise(c, nil)
+	if err != nil {
+		return err
+	}
+
+	//Если за акциз было начисление то переходим к следующему акцизу
+	if itemScanned.ID > 0 {
+		return nil
+	}
+
+	//Получаем бонусы и товар из акцизных накладных
+	err = itemInvoice.GetByExciseRange(c, nil, item.ExciseNumber)
+	if err != nil {
+		return err
+	}
+
+	if itemInvoice.ID == 0 {
+		return errors.New("Акциз не найден среди загруженных накладных - строка: " + strconv.Itoa(idx+1))
+	}
+
+	//Post запрос в tuvis.world для начисления бонусов и получения информации о потребителе
+	responseData := TuvisManulBonusResponse{}
+
+	request := resty.New()
+	resp, err := request.R().
+		SetHeader("Content-Type", "application/json").
+		SetHeader("X-Token-API", settings.TuviSXTokenAPI).
+		SetBody(ManualBonusType{CardID: 1, ClientCode: item.ClientCode, Points: itemInvoice.ItemBonus, TransactionType: "sale"}).
+		SetResult(&responseData).
+		SetError(&responseData).
+		Post(settings.TuviSHost)
+
+	if err != nil {
+		return err
+	}
+
+	//Если запрос верулся с ошибкой
+	if !resp.IsSuccess() {
+		return errors.New("TuviS: " + responseData.TuvisResponse.Message + " - строка: " + strconv.Itoa(idx+1))
+	}
+
+	//Если при начислении бонусов произошла ошибка
+	if responseData.TuvisResponse.Status == "false" {
+		return errors.New("TuviS: " + responseData.TuvisResponse.Message + " - строка: " + strconv.Itoa(idx+1))
+	}
+
+	//Получаем клиента по ClientID
+	client.ClientID = responseData.Client.ID
+	err = client.GetByClientID(c, nil)
+	if err != nil {
+		return err
+	}
+
+	//Заполняем клиента новой информацией
+	client.ClientID = responseData.Client.ID
+	client.FirstName = responseData.Client.FirstName
+	client.LastName = responseData.Client.LastName
+	client.Phone = responseData.Client.Phone
+	client.Gender = responseData.Client.Gender
+	client.DocumentID = responseData.Client.DocumentID
+	client.DateOfBirth = responseData.Client.DateOfBirth
+	client.Comment = responseData.Client.Comment
+	client.IsLegalEntity = responseData.Client.IsLegalEntity
+	client.BusinessID = responseData.Client.BusinessID
+	client.LegalAddress = responseData.Client.LegalAddress
+
+	if client.ID > 0 {
+		err = client.Put(c, nil)
+	} else {
+		err = client.Post(c, nil)
+	}
+	if err != nil {
+		return err
+	}
+
+	//Вставляем в отсканированные акцизы новую запись
+	itemScanned.ClientID = client.ID
+	itemScanned.ItemName = itemInvoice.ItemName
+	itemScanned.ItemType = itemInvoice.ItemType
+	itemScanned.ItemVolume = itemInvoice.ItemVolume
+	itemScanned.ItemMarkType = itemInvoice.ItemMarkType
+	itemScanned.ItemSerial = itemInvoice.ItemSerial
+	itemScanned.ItemExcise = item.ExciseNumber
+	itemScanned.ItemBonus = itemInvoice.ItemBonus
+
+	err = itemScanned.Post(c, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 //IncomeScanData данные которые приходят от TuviS после сканирования
 type IncomeScanData struct {

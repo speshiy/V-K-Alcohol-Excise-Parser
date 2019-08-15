@@ -52,7 +52,7 @@ func GetItemScannedReport(c *gin.Context, filter mshared.Filter, isr *[]ItemScan
 				cl.first_name as FirstName,
 				cl.last_name as LastName,
 				cl.phone as Phone,
-				IF(cl.gender = 'male', 'Мужской', 'Женский') as Gender,
+				CASE cl.gender WHEN 'male' THEN 'Мужской' WHEN 'female' THEN 'Женский' END  as Gender,
 				cl.document_id as DocumentID,
 				cl.date_of_birth as DateOfBirth,
 				cl.comment as Comment, 

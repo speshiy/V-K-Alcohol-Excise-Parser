@@ -26,3 +26,9 @@ var DBRTUP string
 
 //IsSSL release flag
 var IsSSL = false
+
+//TuviSHost host
+var TuviSHost string
+
+//TuviSXTokenAPI host
+var TuviSXTokenAPI string
