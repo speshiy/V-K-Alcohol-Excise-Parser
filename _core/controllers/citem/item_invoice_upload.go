@@ -21,8 +21,8 @@ type incomeData struct {
 	ItemBonus             float32 `json:"ItemBonus"`
 }
 
-//UploadXLS загружает JSON с алкогольной продукцией и вставляет их в БД
-func UploadXLS(c *gin.Context) {
+//UploadExciseXLS загружает JSON с алкогольной продукцией и вставляет их в БД
+func UploadExciseXLS(c *gin.Context) {
 	var err error
 	var items []incomeData
 
