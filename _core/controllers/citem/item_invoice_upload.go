@@ -10,7 +10,8 @@ import (
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 )
 
-type incomeData struct {
+//IncomeInvoiceData структура
+type IncomeInvoiceData struct {
 	ItemName              string  `json:"ItemName"`
 	ItemType              string  `json:"ItemType"`
 	ItemVolume            float32 `json:"ItemVolume"`
@@ -24,7 +25,7 @@ type incomeData struct {
 //UploadExciseXLS загружает JSON с алкогольной продукцией и вставляет их в БД
 func UploadExciseXLS(c *gin.Context) {
 	var err error
-	var items []incomeData
+	var items []IncomeInvoiceData
 
 	if err = c.ShouldBindJSON(&items); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
@@ -37,7 +38,7 @@ func UploadExciseXLS(c *gin.Context) {
 		return
 	}
 
-	for index, item := range items {
+	for idx, item := range items {
 		newItem := mitem.ItemInvoice{}
 		newItem.ItemName = item.ItemName
 		newItem.ItemType = item.ItemType
@@ -51,10 +52,10 @@ func UploadExciseXLS(c *gin.Context) {
 		err = newItem.Post(c, nil)
 		if err != nil {
 			if strings.Contains(err.Error(), "1062") {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(index+1) +
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(idx+1) +
 					" - попытка вставить существующий диапазон акцизов"})
 			} else {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(index+1)})
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(idx+1)})
 			}
 			return
 		}
@@ -64,7 +65,7 @@ func UploadExciseXLS(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "true", "message": "Загрузка данных завершена"})
 }
 
-func validate(c *gin.Context, items *[]incomeData) error {
+func validate(c *gin.Context, items *[]IncomeInvoiceData) error {
 	var err error
 
 	for idx, item := range *items {

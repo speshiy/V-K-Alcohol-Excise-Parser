@@ -36,7 +36,7 @@ type Config struct {
 func (c *Config) SetConfigLocal() {
 	c.Type = "local"
 	c.DBHD = "127.0.0.1"
-	c.PortHTTP = "8080"
+	c.PortHTTP = "8880"
 	c.PortHTTPS = "8443"
 	c.PortService = "8081"
 	c.DBRP = "1"
