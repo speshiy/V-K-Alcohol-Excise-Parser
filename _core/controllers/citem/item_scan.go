@@ -58,7 +58,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int) error {
 		SetBody(ManualBonusType{CardID: 1, ClientCode: item.ClientCode, Points: itemInvoice.ItemBonus, TransactionType: "sale"}).
 		SetResult(&responseData).
 		SetError(&responseData).
-		Post(settings.TuviSHost)
+		Post(settings.TuviSHost + "/card/bonus/transaction/vkaep")
 
 	if err != nil {
 		return err
