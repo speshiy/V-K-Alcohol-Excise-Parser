@@ -57,7 +57,7 @@ func (c *Config) SetConfigProd() {
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
 	c.TuviSHost = "https://api.tuvis.world/api/app-manage-staff"
-	c.TuviSXTokenAPI = ""
+	c.TuviSXTokenAPI = "b62c9ce1-31a0-44ee-b5ef-143981db0367"
 }
 
 //GetConfigByType return config by type
