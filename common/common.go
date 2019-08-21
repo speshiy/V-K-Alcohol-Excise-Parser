@@ -23,15 +23,14 @@ import (
 
 //Config fields
 type Config struct {
-	Type           string `json:"Type"`
-	DBHD           string `json:"DBHD"`
-	PortHTTP       string `json:"PortHTTP"`
-	PortHTTPS      string `json:"PortHTTPS"`
-	PortService    string `json:"PortService"`
-	DBRP           string `json:"DBRP"`
-	DBRTUP         string `json:"DBRTUP"`
-	TuviSHost      string `json:"TuviSHost"`
-	TuviSXTokenAPI string `json:"TuviSXTokenAPI"`
+	Type        string `json:"Type"`
+	DBHD        string `json:"DBHD"`
+	PortHTTP    string `json:"PortHTTP"`
+	PortHTTPS   string `json:"PortHTTPS"`
+	PortService string `json:"PortService"`
+	DBRP        string `json:"DBRP"`
+	DBRTUP      string `json:"DBRTUP"`
+	TuviSHost   string `json:"TuviSHost"`
 }
 
 //SetConfigLocal set config for local development
@@ -44,7 +43,6 @@ func (c *Config) SetConfigLocal() {
 	c.DBRP = "1"
 	c.DBRTUP = "1"
 	c.TuviSHost = "http://localhost:8080/api/app-manage-staff"
-	c.TuviSXTokenAPI = "123456"
 }
 
 //SetConfigProd set config for prod development
@@ -57,7 +55,6 @@ func (c *Config) SetConfigProd() {
 	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
 	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
 	c.TuviSHost = "https://api.tuvis.world/api/app-manage-staff"
-	c.TuviSXTokenAPI = "b62c9ce1-31a0-44ee-b5ef-143981db0367"
 }
 
 //GetConfigByType return config by type
@@ -110,7 +107,6 @@ func InitGlobalVars() error {
 	settings.DBRP = config.DBRP
 	settings.DBRTUP = config.DBRTUP
 	settings.TuviSHost = config.TuviSHost
-	settings.TuviSXTokenAPI = config.TuviSXTokenAPI
 	settings.IsSSL = *sslFlag
 
 	log.Println("PortHTTP = ", settings.PortHTTP)

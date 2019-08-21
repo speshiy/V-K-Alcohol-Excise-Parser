@@ -41,9 +41,16 @@ func UploadItemXLS(c *gin.Context) {
 		return
 	}
 
+	//Получаем token чтобы обращаться на сервер TuviS
+	xTokenAPI := c.Param("token")
+	if len(xTokenAPI) == 0 {
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": "X-Token-API от TuviS не заполнен"})
+		return
+	}
+
 	for idx, item := range incomeScannedData {
 		//Устанавливает бонус
-		err = SetBonus(c, &item, idx)
+		err = SetBonus(c, &item, idx, xTokenAPI)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
 			return

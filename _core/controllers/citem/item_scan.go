@@ -19,8 +19,8 @@ type IncomeScannedData struct {
 	ClientCode   string `json:"ClientCode"`
 }
 
-//SetBonus начисляет бонус
-func SetBonus(c *gin.Context, item *IncomeScannedData, idx int) error {
+//SetBonus начисляет бонус в TuviS
+func SetBonus(c *gin.Context, item *IncomeScannedData, idx int, xTokenAPI string) error {
 	var err error
 	var client mclient.Client
 	var itemInvoice mitem.ItemInvoice
@@ -54,7 +54,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int) error {
 	request := resty.New()
 	resp, err := request.R().
 		SetHeader("Content-Type", "application/json").
-		SetHeader("X-Token-API", settings.TuviSXTokenAPI).
+		SetHeader("X-Token-API", xTokenAPI).
 		SetBody(ManualBonusType{CardID: 1, ClientCode: item.ClientCode, Points: itemInvoice.ItemBonus, TransactionType: "sale"}).
 		SetResult(&responseData).
 		SetError(&responseData).

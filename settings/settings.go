@@ -29,6 +29,3 @@ var IsSSL = false
 
 //TuviSHost host
 var TuviSHost string
-
-//TuviSXTokenAPI host
-var TuviSXTokenAPI string
