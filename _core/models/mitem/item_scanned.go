@@ -16,7 +16,7 @@ type ItemScanned struct {
 	ItemVolume   float32 `gorm:"column:item_volume;type:decimal(19,3);not_null;" json:"ItemVolume"`
 	ItemMarkType string  `gorm:"column:item_mark_type;type:varchar(255);not_null;" json:"ItemMarkType"`
 	ItemSerial   string  `gorm:"column:item_serial;type:varchar(255);not_null;" json:"ItemSerial"`
-	ItemExcise   uint    `gorm:"column:item_excise;not_null;;unique_index;" json:"ItemExcise"`
+	ItemExcise   string  `gorm:"column:item_excise;not_null;type:varchar(255);unique_index;" json:"ItemExcise"`
 	ItemBonus    float32 `gorm:"column:item_bonus;type:decimal(19,3);not_null;" json:"ItemBonus"`
 }
 

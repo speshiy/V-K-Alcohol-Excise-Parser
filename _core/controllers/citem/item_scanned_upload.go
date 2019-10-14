@@ -1,6 +1,7 @@
 package citem
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -38,6 +39,7 @@ func UploadItemXLS(c *gin.Context) {
 	//Валидируем входящие данные
 	err = validateScanned(c, &incomeScannedData)
 	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
 		return
 	}
 
@@ -66,14 +68,12 @@ func validateScanned(c *gin.Context, items *[]IncomeScannedData) error {
 	for idx, item := range *items {
 		err = common.Validate.Var(item.ExciseNumber, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Акцизный номер не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Акцизный номер не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ClientCode, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Код клиента не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Код клиента не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 	}
 

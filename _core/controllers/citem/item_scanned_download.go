@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
-
-	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mshared"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/common"
 	"github.com/tealeg/xlsx"
 )
 
@@ -82,7 +80,7 @@ func DownloadXLS(c *gin.Context) {
 		cell.Value = item.ItemSerial
 
 		cell = row.AddCell()
-		cell.Value = strconv.Itoa(int(item.ItemExcise))
+		cell.Value = item.ItemExcise
 
 		cell = row.AddCell()
 		cell.Value = fmt.Sprintf("%.2f", item.ItemBonus)

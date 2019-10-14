@@ -1,6 +1,7 @@
 package citem
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,8 +18,8 @@ type IncomeInvoiceData struct {
 	ItemVolume            float32 `json:"ItemVolume"`
 	ItemMarkType          string  `json:"ItemMarkType"`
 	ItemSerial            string  `json:"ItemSerial"`
-	ItemBeginExciseNumber uint    `json:"ItemBeginExciseNumber"`
-	ItemEndExciseNumber   uint    `json:"ItemEndExciseNumber"`
+	ItemBeginExciseNumber string  `json:"ItemBeginExciseNumber"`
+	ItemEndExciseNumber   string  `json:"ItemEndExciseNumber"`
 	ItemBonus             float32 `json:"ItemBonus"`
 }
 
@@ -35,6 +36,7 @@ func UploadExciseXLS(c *gin.Context) {
 	//Валидируем входящие данные
 	err = validate(c, &items)
 	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
 		return
 	}
 
@@ -71,60 +73,52 @@ func validate(c *gin.Context, items *[]IncomeInvoiceData) error {
 	for idx, item := range *items {
 		err = common.Validate.Var(item.ItemName, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Название продукции не заполнено - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Название продукции не заполнено - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemType, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Вид продукции не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Вид продукции не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemVolume, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Емкость продукции не заполнена - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Емкость продукции не заполнена - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemMarkType, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Тип марки не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Тип марки не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemSerial, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Серия не заполнена - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Серия не заполнена - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemBeginExciseNumber, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Начальный номер не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Начальный номер не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemEndExciseNumber, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Конечный номер не заполнен - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Конечный номер не заполнен - строка: " + strconv.Itoa(idx+1))
 		}
 
-		if item.ItemBeginExciseNumber > item.ItemEndExciseNumber {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Начальный номер акцизов больше чем конечный - строка: " + strconv.Itoa(idx+1)})
-			return err
+		n1, _ := strconv.Atoi(item.ItemBeginExciseNumber)
+		n2, _ := strconv.Atoi(item.ItemEndExciseNumber)
+		if n1 > n2 {
+			return errors.New("Начальный номер акцизов больше чем конечный - строка: " + strconv.Itoa(idx+1))
 		}
 
 		err = common.Validate.Var(item.ItemBonus, "required")
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Бонусы не заполнены - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Бонусы не заполнены - строка: " + strconv.Itoa(idx+1))
 		}
 
 		if item.ItemBonus < 0 {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Бонус не может быть меньше нуля - строка: " + strconv.Itoa(idx+1)})
-			return err
+			return errors.New("Бонус не может быть меньше нуля - строка: " + strconv.Itoa(idx+1))
 		}
 	}
 

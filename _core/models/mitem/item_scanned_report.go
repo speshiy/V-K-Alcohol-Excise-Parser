@@ -18,7 +18,7 @@ type ItemScannedReport struct {
 	ItemVolume    float32   `gorm:"column:ItemVolume" json:"ItemVolume"`
 	ItemMarkType  string    `gorm:"column:ItemMarkType" json:"ItemMarkType"`
 	ItemSerial    string    `gorm:"column:ItemSerial" json:"ItemSerial"`
-	ItemExcise    uint      `gorm:"column:ItemExcise" json:"ItemExcise"`
+	ItemExcise    string    `gorm:"column:ItemExcise" json:"ItemExcise"`
 	ItemBonus     float32   `gorm:"column:ItemBonus" json:"ItemBonus"`
 	FirstName     string    `gorm:"column:FirstName" json:"FirstName"`
 	LastName      string    `gorm:"column:LastName" json:"LastName"`

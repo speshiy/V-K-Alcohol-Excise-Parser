@@ -15,7 +15,7 @@ import (
 
 //IncomeScannedData структура
 type IncomeScannedData struct {
-	ExciseNumber uint   `json:"ExciseNumber"`
+	ExciseNumber string `json:"ExciseNumber"`
 	ClientCode   string `json:"ClientCode"`
 }
 
@@ -124,7 +124,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int, xTokenAPI string
 //IncomeScanData данные которые приходят от TuviS после сканирования
 type IncomeScanData struct {
 	Client mclient.Client `json:"Client"`
-	Excise uint           `json:"Excise"`
+	Excise string         `json:"Excise"`
 }
 
 //GetItemBonus находим акцизный номер в загруженных накладных и возвращаем бонусы в TuviS для начисления

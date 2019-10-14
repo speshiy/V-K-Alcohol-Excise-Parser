@@ -15,8 +15,8 @@ type ItemInvoice struct {
 	ItemVolume            float32 `gorm:"column:item_volume;type:decimal(19,3);default:null" json:"ItemVolume"`
 	ItemMarkType          string  `gorm:"column:item_mark_type;type:varchar(255);default:null" json:"ItemMarkType"`
 	ItemSerial            string  `gorm:"column:item_serial;type:varchar(255);default:null" json:"ItemSerial"`
-	ItemBeginExciseNumber uint    `gorm:"column:item_begin_excise_number;default:null;unique_index;" json:"ItemBeginExciseNumber"`
-	ItemEndExciseNumber   uint    `gorm:"column:item_end_excise_number;default:null;unique_index;" json:"ItemEndExciseNumber"`
+	ItemBeginExciseNumber string  `gorm:"column:item_begin_excise_number;type:varchar(255);default:null;unique_index;" json:"ItemBeginExciseNumber"`
+	ItemEndExciseNumber   string  `gorm:"column:item_end_excise_number;type:varchar(255);default:null;unique_index;" json:"ItemEndExciseNumber"`
 	ItemBonus             float32 `gorm:"column:item_bonus;type:decimal(19,3);default:null" json:"ItemBonus"`
 }
 
@@ -41,7 +41,7 @@ func GetItemInvoices(c *gin.Context, DB *gorm.DB, ii *[]ItemInvoice) error {
 }
 
 //GetByExciseRange возвращаем накладную по акцизу в промежутке между цифрами
-func (i *ItemInvoice) GetByExciseRange(c *gin.Context, DB *gorm.DB, excise uint) error {
+func (i *ItemInvoice) GetByExciseRange(c *gin.Context, DB *gorm.DB, excise string) error {
 	if DB == nil {
 		DB = c.MustGet("DB").(*gorm.DB)
 	}
