@@ -45,7 +45,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int, xTokenAPI string
 	}
 
 	if itemInvoice.ID == 0 {
-		return errors.New("Акциз не найден среди загруженных накладных - строка: " + strconv.Itoa(idx+1) + ", " + item.ExciseNumber)
+		return errors.New("Акциз не найден среди загруженных накладных - строка: " + strconv.Itoa(idx+1) + ", акциз: " + item.ExciseNumber)
 		// return nil
 	}
 
