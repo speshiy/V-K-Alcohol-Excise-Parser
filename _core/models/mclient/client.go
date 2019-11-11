@@ -22,6 +22,7 @@ type Client struct {
 	IsLegalEntity bool      `gorm:"column:is_legal_entity;not null; default:0" json:"IsLegalEntity"`
 	BusinessID    string    `gorm:"column:business_id;type:varchar(255); DEFAULT:null" json:"BusinessID"`
 	LegalAddress  string    `gorm:"column:legal_address;type:varchar(255); DEFAULT:null" json:"LegalAddress"`
+	Timezone      string    `gorm:"column:timezone;type:varchar(255); DEFAULT:null" json:"Timezone"`
 }
 
 //TableName return new table name

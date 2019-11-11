@@ -54,8 +54,9 @@ func UploadExciseXLS(c *gin.Context) {
 		err = newItem.Post(c, nil)
 		if err != nil {
 			if strings.Contains(err.Error(), "1062") {
-				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(idx+1) +
-					" - попытка вставить существующий диапазон акцизов"})
+				// c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(idx+1) +
+				// 	" - попытка вставить существующий диапазон акцизов"})
+				continue
 			} else {
 				c.JSON(http.StatusOK, gin.H{"status": "false", "message": "Ошибка при вставке товара в БД, cтрока: " + strconv.Itoa(idx+1)})
 			}

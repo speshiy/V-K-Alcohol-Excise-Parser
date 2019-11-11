@@ -94,6 +94,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int, xTokenAPI string
 	client.IsLegalEntity = responseData.Client.IsLegalEntity
 	client.BusinessID = responseData.Client.BusinessID
 	client.LegalAddress = responseData.Client.LegalAddress
+	client.Timezone = responseData.Client.Timezone
 
 	if client.ID > 0 {
 		err = client.Put(c, nil)
