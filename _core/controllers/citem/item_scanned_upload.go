@@ -28,7 +28,7 @@ type ManualBonusType struct {
 //UploadItemXLS загружает JSON с отсканированными/сфотографированными товарами
 func UploadItemXLS(c *gin.Context) {
 	var err error
-
+	var errorExcises []string
 	var incomeScannedData []IncomeScannedData
 
 	if err = c.ShouldBindJSON(&incomeScannedData); err != nil {
@@ -54,12 +54,17 @@ func UploadItemXLS(c *gin.Context) {
 		//Устанавливает бонус
 		err = SetBonus(c, &item, idx, xTokenAPI)
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
-			return
+			if err.Error() == "excise_not_found" {
+				errorExcises = append(errorExcises, item.ExciseNumber)
+			} else {
+				c.JSON(http.StatusOK, gin.H{"status": "false", "message": err.Error()})
+				return
+			}
+
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "true", "message": "Загрузка данных завершена"})
+	c.JSON(http.StatusOK, gin.H{"status": "true", "message": "Загрузка данных завершена", "data": errorExcises})
 }
 
 func validateScanned(c *gin.Context, items *[]IncomeScannedData) error {

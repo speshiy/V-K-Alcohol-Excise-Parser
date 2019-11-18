@@ -30,6 +30,7 @@ type ItemScannedReport struct {
 	IsLegalEntity bool      `gorm:"column:IsLegalEntity" json:"IsLegalEntity"`
 	BusinessID    string    `gorm:"column:BusinessID" json:"BusinessID"`
 	LegalAddress  string    `gorm:"column:LegalAddress" json:"LegalAddress"`
+	Timezone      string    `gorm:"column:Timezone" json:"Timezone"`
 }
 
 //GetItemScannedReport возращает отчет об отсканированных акцизах
@@ -58,7 +59,8 @@ func GetItemScannedReport(c *gin.Context, filter mshared.Filter, isr *[]ItemScan
 				cl.comment as Comment, 
 				cl.is_legal_entity as IsLegalEntity,
 				cl.business_id as BusinessID,
-				cl.legal_address as LegalAddress
+				cl.legal_address as LegalAddress,
+				cl.timezone as Timezone
 			FROM
 				d_items_scanned AS isc
 			JOIN s_clients as cl ON isc.client_id = cl.id
