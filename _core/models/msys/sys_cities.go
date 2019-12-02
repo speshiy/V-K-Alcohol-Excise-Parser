@@ -3,9 +3,7 @@ package msys
 import (
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"github.com/speshiy/Tuvis-Server/_client/models/mclient"
 )
 
 //City stucture
@@ -17,25 +15,6 @@ type City struct {
 //TableName return new table name
 func (City) TableName() string {
 	return "sys_l_cities"
-}
-
-//GetCities return list of cities
-func GetCities(c *gin.Context, db *gorm.DB) ([]City, error) {
-	var r *gorm.DB
-	var sortOrder string
-	var cities []City
-
-	ContextClient, _ := c.Get("Client")
-	countryID := ContextClient.(mclient.Client).CountryID
-
-	sortOrder = "IFNULL(500), name"
-
-	r = db.Where("country_id = ?", countryID).Order(sortOrder).Find(&cities)
-	if r.Error != nil {
-		return cities, r.Error
-	}
-
-	return cities, nil
 }
 
 //PreFill fill table with new data
