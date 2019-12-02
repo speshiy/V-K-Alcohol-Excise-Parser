@@ -11,6 +11,7 @@ import (
 //Client stucture
 type Client struct {
 	gorm.Model
+	CityID        uint      `gorm:"column:city_id; DEFAULT:null" json:"CityID"`
 	ClientID      uint      `gorm:"column:client_id;not null;unique_index;" json:"ClientID"`
 	FirstName     string    `gorm:"column:first_name;type:varchar(100);" json:"FirstName"`
 	LastName      string    `gorm:"column:last_name;type:varchar(100);" json:"LastName"`

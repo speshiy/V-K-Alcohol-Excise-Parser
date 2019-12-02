@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mclient"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/mitem"
+	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/msys"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/_core/models/muser"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/database"
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
@@ -27,6 +28,7 @@ func MigrateVkaep(c *gin.Context) {
 		&mclient.Client{},
 		&mitem.ItemScanned{},
 		&mitem.ItemInvoice{},
+		&msys.City{},
 	)
 	log.Println("Models in DB vkaep created")
 
@@ -36,6 +38,12 @@ func MigrateVkaep(c *gin.Context) {
 
 	var user muser.User
 	err = user.PreFill(db)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	var cities msys.City
+	err = cities.PreFill(db)
 	if err != nil {
 		log.Println(err.Error())
 	}

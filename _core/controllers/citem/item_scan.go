@@ -83,6 +83,7 @@ func SetBonus(c *gin.Context, item *IncomeScannedData, idx int, xTokenAPI string
 	}
 
 	//Заполняем клиента новой информацией
+	client.CityID = responseData.Client.CityID
 	client.ClientID = responseData.Client.ID
 	client.FirstName = responseData.Client.FirstName
 	client.LastName = responseData.Client.LastName
@@ -189,6 +190,7 @@ func GetItemBonus(c *gin.Context) {
 	}
 
 	//Заполняем клиента новой информацией
+	client.CityID = incomeScannedData.Client.CityID
 	client.ClientID = incomeScannedData.Client.ClientID
 	client.FirstName = incomeScannedData.Client.FirstName
 	client.LastName = incomeScannedData.Client.LastName
