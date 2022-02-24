@@ -22,7 +22,7 @@
     mount_filesystem_path: "/src/github.com/speshiy/V-K-Alcohol-Excise-Parser"
     shell: "SH"
     trigger_condition: "ALWAYS"
-  - action: "[139.162.176.101] Execute: mkdir /root/vkaep_preupdate"
+  - action: "Execute: mkdir /root/vkaep_preupdate"
     type: "SSH_COMMAND"
     login: "root"
     host: "${IP}"
@@ -35,7 +35,7 @@
     run_as_script: true
     shell: "SH"
     trigger_condition: "ALWAYS"
-  - action: "Upload files to 139.162.176.101"
+  - action: "Upload files"
     type: "SFTP"
     input_type: "BUILD_ARTIFACTS"
     local_path: "vkaep_build.tar"

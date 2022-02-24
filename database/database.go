@@ -11,7 +11,7 @@ import (
 	"github.com/speshiy/V-K-Alcohol-Excise-Parser/settings"
 )
 
-//CreateUserRTU create rtu user
+//CreateUserRTU create remote_user user
 func CreateUserRTU(host string) error {
 	var err error
 	var db *gorm.DB
@@ -22,12 +22,12 @@ func CreateUserRTU(host string) error {
 	defer db.Close()
 
 	//host 192.168.%
-	err = db.Exec("CREATE USER IF NOT EXISTS 'rtu'@'%' IDENTIFIED BY '" + settings.DBRTUP + "'").Error
+	err = db.Exec("CREATE USER IF NOT EXISTS 'remote_user'@'%' IDENTIFIED BY '" + settings.DBRTUP + "'").Error
 	if err != nil {
 		return err
 	}
 
-	err = db.Exec("GRANT ALL PRIVILEGES ON *.* TO 'rtu'@'%' WITH GRANT OPTION").Error
+	err = db.Exec("GRANT ALL PRIVILEGES ON *.* TO 'remote_user'@'%' WITH GRANT OPTION").Error
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func CreateUserRTU(host string) error {
 func CreateUser(isDemo bool, host string, databaseName string, username string, password string) error {
 	var err error
 	var db *gorm.DB
-	db, err = gorm.Open("mysql", "rtu:"+settings.DBRTUP+"@tcp("+host+":3306)/")
+	db, err = gorm.Open("mysql", "remote_user:"+settings.DBRTUP+"@tcp("+host+":3306)/")
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func CreateUser(isDemo bool, host string, databaseName string, username string, 
 func CreateDatabase(host string, databaseName string) error {
 	var err error
 	var db *gorm.DB
-	db, err = gorm.Open("mysql", "rtu:"+settings.DBRTUP+"@tcp("+host+":3306)/")
+	db, err = gorm.Open("mysql", "remote_user:"+settings.DBRTUP+"@tcp("+host+":3306)/")
 	if err != nil {
 		if strings.Contains(err.Error(), "1045") {
 			err = CreateUserRTU(host)
@@ -82,7 +82,7 @@ func CreateDatabase(host string, databaseName string) error {
 				return err
 			}
 
-			db, err = gorm.Open("mysql", "rtu:"+settings.DBRTUP+"@tcp("+host+":3306)/")
+			db, err = gorm.Open("mysql", "remote_user:"+settings.DBRTUP+"@tcp("+host+":3306)/")
 			if err != nil {
 				return err
 			}
@@ -105,7 +105,7 @@ func DropDatabase(host string, databaseName string, username string) error {
 	var err error
 	var r *gorm.DB
 	var db *gorm.DB
-	db, err = gorm.Open("mysql", "rtu:"+settings.DBRTUP+"@tcp("+host+":3306)/")
+	db, err = gorm.Open("mysql", "remote_user:"+settings.DBRTUP+"@tcp("+host+":3306)/")
 	if err != nil {
 		return err
 	}

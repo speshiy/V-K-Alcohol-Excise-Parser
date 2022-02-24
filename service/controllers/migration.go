@@ -13,7 +13,7 @@ import (
 func AutoMigrate() {
 	var c gin.Context
 
-	DB, err := database.TryOpenDatabase(settings.DBHostDefault, "information_schema", "rtu", settings.DBRTUP, "UTC")
+	DB, err := database.TryOpenDatabase(settings.DBHostDefault, "information_schema", "remote_user", settings.DBRTUP, "UTC")
 	if err != nil {
 		log.Println("Connection to DBMain in service FAILED. ", err.Error())
 		return

@@ -42,7 +42,7 @@ func (c *Config) SetConfigLocal() {
 	c.PortService = "8881"
 	c.DBRP = "1"
 	c.DBRTUP = "1"
-	c.TuviSHost = "http://localhost:8080/api/app-manage-staff"
+	c.TuviSHost = ""
 }
 
 //SetConfigProd set config for prod development
@@ -52,9 +52,9 @@ func (c *Config) SetConfigProd() {
 	c.PortHTTP = "80"
 	c.PortHTTPS = "443"
 	c.PortService = "8081"
-	c.DBRP = "UWW4ghrj#$skjerk32ejlwq"
-	c.DBRTUP = "dfgadrtglOu8#$43uuhfdjnJS"
-	c.TuviSHost = "https://api.tuvis.world/api/app-manage-staff"
+	c.DBRP = ""
+	c.DBRTUP = ""
+	c.TuviSHost = ""
 }
 
 //GetConfigByType return config by type
